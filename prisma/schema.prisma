@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          String    @default("USER") // USER, ADMIN
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  wallet       Wallet?
+  donations    Donation[]
+  transactions Transaction[]
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  balance   Int      @default(0)
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  amount    Int
+  type      String // EARNED, DONATED
+  source    String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Campaign {
+  id               String   @id @default(cuid())
+  title            String
+  description      String   @db.Text
+  shortDescription String
+  category         String
+  goal             Float
+  raised           Float    @default(0)
+  endDate          DateTime
+  imageUrl         String?
+  featured         Boolean  @default(false)
+  status           String   @default("ACTIVE") // ACTIVE, COMPLETED, DRAFT, PAUSED
+  createdBy        String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  donations Donation[]
+  updates   CampaignUpdate[]
+}
+
+model Donation {
+  id            String   @id @default(cuid())
+  amount        Float
+  message       String?
+  paymentMethod String   // CARD, TOKENS
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignId    String
+  campaign      Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+}
+
+model CampaignUpdate {
+  id         String   @id @default(cuid())
+  title      String
+  content    String   @db.Text
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}

@@ -1,0 +1,208 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      users: {
+        Row: {
+          id: string
+          name: string | null
+          email: string
+          password: string | null
+          role: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name?: string | null
+          email: string
+          password?: string | null
+          role?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string | null
+          email?: string
+          password?: string | null
+          role?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      wallets: {
+        Row: {
+          id: string
+          balance: number
+          user_id: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          balance?: number
+          user_id: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          balance?: number
+          user_id?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      transactions: {
+        Row: {
+          id: string
+          amount: number
+          type: string
+          source: string
+          user_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          amount: number
+          type: string
+          source: string
+          user_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          amount?: number
+          type?: string
+          source?: string
+          user_id?: string
+          created_at?: string
+        }
+      }
+      campaigns: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          short_description: string
+          category: string
+          goal: number
+          end_date: string
+          image_url: string | null
+          featured: boolean
+          status: string
+          created_by: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          short_description: string
+          category: string
+          goal: number
+          end_date: string
+          image_url?: string | null
+          featured?: boolean
+          status?: string
+          created_by: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          short_description?: string
+          category?: string
+          goal?: number
+          end_date?: string
+          image_url?: string | null
+          featured?: boolean
+          status?: string
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      donations: {
+        Row: {
+          id: string
+          amount: number
+          message: string | null
+          payment_method: string
+          user_id: string
+          campaign_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          amount: number
+          message?: string | null
+          payment_method: string
+          user_id: string
+          campaign_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          amount?: number
+          message?: string | null
+          payment_method?: string
+          user_id?: string
+          campaign_id?: string
+          created_at?: string
+        }
+      }
+      campaign_updates: {
+        Row: {
+          id: string
+          title: string
+          content: string
+          campaign_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          content: string
+          campaign_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          content?: string
+          campaign_id?: string
+          created_at?: string
+        }
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+  }
+}
+
+// Helper types for API responses
+export type User = Database['public']['Tables']['users']['Row']
+export type Wallet = Database['public']['Tables']['wallets']['Row']
+export type Transaction = Database['public']['Tables']['transactions']['Row']
+export type Campaign = Database['public']['Tables']['campaigns']['Row']
+export type Donation = Database['public']['Tables']['donations']['Row']
+export type CampaignUpdate = Database['public']['Tables']['campaign_updates']['Row']
